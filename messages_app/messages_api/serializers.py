@@ -20,14 +20,6 @@ class GetAllMessageSerializer(rfs.ModelSerializer):
         model = Messages
         fields = ['id']
 
-# class GetAllMessageUnreadedSerializer(rfs.ModelSerializer):
-#     """Serializes a get all messages of a user"""
-#     class Meta:
-#         model = Messages
-#         fields = ['id', 'sender', 'receiver', 'is_read', 'delete_sender', 'delete_receiver']
-    
-
-
 class ReadMessageSerializer(rfs.ModelSerializer):
     """Serializes a message and read it """
     class Meta:
