@@ -1,1 +1,1 @@
-web: gunicorn messages_app.wsgi
+web: gunicorn --pythonpath messages_app messages_app.wsgi
