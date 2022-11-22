@@ -1,1 +1,1 @@
-web: gunicorn messages_app.wsgi
+web: gunicorn message_app.wsgi
