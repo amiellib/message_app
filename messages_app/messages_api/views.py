@@ -67,7 +67,7 @@ class messagesApiView(viewsets.ModelViewSet):
         else:
             return Response({'message':serializer.data})
 
-    @action(methods=['put'], detail=False)
+    @action(methods=['put','get'], detail=False)
     def delete_message(self, request):
         """Delete a message"""
         qs_sender = Messages.objects.filter(sender = request.user)
