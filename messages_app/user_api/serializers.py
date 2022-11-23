@@ -16,6 +16,14 @@ class UserLoginSerializer(rfs.Serializer):
         fields = ('email', 'password')
 
 
+class UserCreateSerializer(rfs.Serializer):
+    email = rfs.EmailField(write_only=True)
+    name = rfs.CharField(write_only=True)
+    """Serializes a create user"""
+    class Meta:
+        fields = ('email', 'name')
+
+
 class UserTokenSerializer(rfs.ModelSerializer):
     """Serializes a token """
     class Meta:

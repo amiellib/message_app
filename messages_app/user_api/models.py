@@ -1,9 +1,17 @@
 from django.db import models
-# from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from rest_framework.authtoken.models import Token
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.conf import settings
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender,instance = None, created= False, **kwargs):
+    """Make sure all users have an auth_token"""
+    if created:
+        Token.objects.create(user = instance)
 
 
 class Users_manager(BaseUserManager):
@@ -12,19 +20,20 @@ class Users_manager(BaseUserManager):
         """Crate a new user"""
         if not email:
             raise ValueError('User must have an email address')
-
         email = self.normalize_email(email)
-        user = self.model(email = email, name = name)
+        new_user = self.model(email = email, name = name)
 
-        user.set_password(password)
-        user.save(using=self._db)
-        Token.objects.create(user = user)
-        return user
+        new_user.set_password(password)
+        new_user.save(using=self._db)
+
+        token = Token.objects.create(user = new_user)
+        print(token)
+        return new_user
 
 
     def create_superuser(self, email, name, password):
         """Crate a new superuser"""
-        user = self.create_user(email, name, password, )
+        user = self.create_user(email, name, password)
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
@@ -38,8 +47,9 @@ class UsersProfile(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=50)#full name 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+
     objects = Users_manager() 
-    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
     
@@ -55,6 +65,9 @@ class UsersProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Retrieve email of a user"""
         return self.email
+
+
+
 
 
 

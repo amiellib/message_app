@@ -1,14 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Messages, Messages_deleted_archive
-# from user_api.models import UsersProfile
 from messages_api import serializers
 from rest_framework.decorators import action
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAdminUser
-from rest_framework.decorators import api_view, permission_classes
-
+from rest_framework.permissions import  IsAdminUser
+from rest_framework.decorators import  permission_classes
 # Create your views here.
 
 class messagesApiView(viewsets.ModelViewSet):
@@ -19,7 +17,6 @@ class messagesApiView(viewsets.ModelViewSet):
         """Create a new message"""
         serializer = serializers.CreateMessageSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
-
         msg = Messages( sender = request.user, 
         receiver = serializer.validated_data.get('receiver'),
         subject = serializer.data['subject'], body = serializer.data['body'])
