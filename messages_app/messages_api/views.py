@@ -106,7 +106,6 @@ class messagesApiView(viewsets.ModelViewSet):
 class MessagesDeletedApiView(viewsets.ViewSet):
     @permission_classes([IsAdminUser])
     @action(methods=['get'], detail=False)
-    # @api_view(["GET"])
     def get_all_messages_archive(self, request):
         """Get all messages that archive """ 
         qs = Messages_deleted_archive.objects.all()
@@ -115,7 +114,7 @@ class MessagesDeletedApiView(viewsets.ViewSet):
 
 
     @permission_classes([IsAdminUser])
-    @action(methods=['post'], detail=False)
+    @action(methods=['post','get'], detail=False)
     def delete_messages_archive(self, request):
         """Delete an archive message""" 
         id_return = request.data.get("id")

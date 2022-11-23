@@ -21,6 +21,7 @@ class UserApiView(APIView):
         # serializer.is_valid(raise_exception=True)
         return Response({'users': serializer.data})
 
+
     @api_view(["POST"])
     @permission_classes([AllowAny])
     def login(request, *args, **kwargs):
@@ -31,11 +32,9 @@ class UserApiView(APIView):
         serializer = UserLoginSerializer(data = request.data )
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
-        print(validated_data["email"])
-        user = authenticate(request, username=validated_data["email"], password=validated_data["password"])
-        serializer = UserTokenSerializer(user)
-        print(user)
-        return Response(serializer.data)    
+        user = authenticate(username=validated_data["email"], password=validated_data["password"])
+        serializer_data = UserTokenSerializer(user)
+        return Response(serializer_data.data)    
 
 
     @api_view(["POST"])
